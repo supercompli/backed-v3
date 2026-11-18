@@ -1,0 +1,8 @@
+{
+  "schema_version": "1.0",
+  "name": "BackedSure",
+  "description": "South African Professional Indemnity insurance platform for professionals and professional-service businesses.",
+  "url": "https://backedsure.co.za",
+  "capabilities": ["quote", "contact", "claims", "insurance-guidance"],
+  "contact": "hello@backedsure.co.za"
+}

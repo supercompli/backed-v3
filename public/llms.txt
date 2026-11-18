@@ -1,0 +1,18 @@
+# BackedSure
+
+BackedSure is a South African specialist insurance platform for Professional Indemnity cover and related professional risk insurance.
+
+## Key Pages
+
+- Home: https://backedsure.co.za/
+- Get a quote: https://backedsure.co.za/quote
+- Professional Indemnity guide: https://backedsure.co.za/professional-indemnity
+- PI cost guide: https://backedsure.co.za/professional-indemnity/cost
+- Professions directory: https://backedsure.co.za/professions
+- Claims: https://backedsure.co.za/claims
+- Resources: https://backedsure.co.za/resources
+- Contact: https://backedsure.co.za/contact
+
+## Contact
+
+Email: hello@backedsure.co.za

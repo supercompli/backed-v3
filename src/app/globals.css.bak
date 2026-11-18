@@ -1,0 +1,79 @@
+@import "tailwindcss";
+
+:root {
+  --color-primary-dark: #162a24;
+  --color-text-primary: lab(26.9569 -1.47016 -15.6993);
+  --color-text-secondary: lab(7.78673 1.82345 -15.0537);
+  --color-text-tertiary: lab(35.5623 -1.74978 -15.4316);
+  --color-text-inverse: #111827;
+  --color-text-dark: var(--color-text-primary);
+  --color-green: #2f6454;
+  --color-green-dark: #234c40;
+  --color-soft-green: #e8f1ed;
+  --color-surface-base: #000000;
+  --color-surface-muted: #ffffff;
+  --color-surface-raised: lab(98.1434 -0.369519 -1.05966);
+  --color-surface-strong: lab(48.4493 77.4328 61.5452);
+  --color-warm-bg: var(--color-surface-raised);
+  --color-white: var(--color-surface-muted);
+  --color-accent: #c8e36e;
+  --color-accent-dark: #a9c94a;
+  --color-border: #e5e7e3;
+  --color-danger: #b3452f;
+}
+
+@theme inline {
+  --color-primary-dark: var(--color-primary-dark);
+  --color-text-primary: var(--color-text-primary);
+  --color-text-secondary: var(--color-text-secondary);
+  --color-text-tertiary: var(--color-text-tertiary);
+  --color-text-inverse: var(--color-text-inverse);
+  --color-text-dark: var(--color-text-dark);
+  --color-green: var(--color-green);
+  --color-green-dark: var(--color-green-dark);
+  --color-soft-green: var(--color-soft-green);
+  --color-surface-base: var(--color-surface-base);
+  --color-surface-muted: var(--color-surface-muted);
+  --color-surface-raised: var(--color-surface-raised);
+  --color-surface-strong: var(--color-surface-strong);
+  --color-warm-bg: var(--color-warm-bg);
+  --color-white: var(--color-white);
+  --color-accent: var(--color-accent);
+  --color-accent-dark: var(--color-accent-dark);
+  --color-border: var(--color-border);
+  --color-danger: var(--color-danger);
+  --font-sans: var(--font-plus-jakarta-sans);
+  --container-page: 850px;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-warm-bg);
+  color: var(--color-text-dark);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+    sans-serif;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: var(--color-primary-dark);
+}
+
+.container-page {
+  max-width: 1050px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .container-page {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}

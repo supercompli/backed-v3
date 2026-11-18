@@ -1,0 +1,35 @@
+# BackedSure
+
+BackedSure helps South African professionals and professional-service businesses understand, apply for, and manage Professional Indemnity insurance.
+
+## What BackedSure Covers
+
+- Professional Indemnity insurance for advice, errors, omissions, negligence, and professional-service liability.
+- Cyber Liability for data breaches, ransomware, and network security failures.
+- Directors & Officers Liability for directors and officers facing management liability claims.
+- Fidelity Guarantee for employee theft, fraud, and dishonesty.
+- Commercial Crime for broader crime exposures.
+- Public Liability for third-party bodily injury or property damage.
+
+## Main User Tasks
+
+- Select a profession.
+- Complete a quote application.
+- Understand PI cover, exclusions, pricing factors, retroactive dates, run-off cover, and claims-made policy mechanics.
+- Notify a claim or circumstance.
+- Browse resources and profession-specific insurance guidance.
+
+## Important URLs
+
+- https://backedsure.co.za/
+- https://backedsure.co.za/quote
+- https://backedsure.co.za/professional-indemnity
+- https://backedsure.co.za/professional-indemnity/cost
+- https://backedsure.co.za/professions
+- https://backedsure.co.za/claims
+- https://backedsure.co.za/resources
+- https://backedsure.co.za/contact
+
+## Contact
+
+Email: hello@backedsure.co.za
