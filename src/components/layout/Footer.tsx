@@ -119,7 +119,7 @@ export function Footer() {
 
         <div className="mt-12 pt-8 border-t border-white/10">
           <p className="text-xs text-white/50 leading-relaxed max-w-4xl">
-            BackedSure is div of Covered Financial Services, an authorised Financial Services Provider. FSP number: 54871. Professional Indemnity and related insurance products are underwritten by insurers registered with the Prudential Authority. Terms, conditions and exclusions apply. Premiums shown on this website are indicative unless expressly
+            Professional Indemnity and related insurance products are underwritten by insurers registered with the Prudential Authority. Terms, conditions and exclusions apply. Premiums shown on this website are indicative unless expressly
             confirmed as a formal quotation, and final acceptance and premium are subject to
             insurer underwriting.
           </p>
