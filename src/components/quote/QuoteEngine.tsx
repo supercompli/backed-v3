@@ -179,11 +179,15 @@ export function QuoteEngine({
       },
     };
 
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => controller.abort(), 20_000);
+
     try {
       const res = await fetch("/api/quote", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(answers),
+        signal: controller.signal,
       });
       if (!res.ok)
         throw new Error("Unable to process your application right now.");
@@ -195,6 +199,7 @@ export function QuoteEngine({
         "Something went wrong submitting your application. Please try again.",
       );
     } finally {
+      window.clearTimeout(timeout);
       setSubmitting(false);
     }
   }

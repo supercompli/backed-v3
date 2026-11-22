@@ -31,6 +31,9 @@ function createTransport() {
     host: smtpHost,
     port: smtpPort,
     secure: smtpPort === 465,
+    connectionTimeout: 10_000,
+    greetingTimeout: 10_000,
+    socketTimeout: 15_000,
     auth: {
       user: smtpUser,
       pass: smtpPass,
