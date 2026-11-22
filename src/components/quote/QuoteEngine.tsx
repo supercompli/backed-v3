@@ -351,7 +351,7 @@ export function QuoteEngine({
                     ) : null}
                     {!addressLookupConfigured ? (
                       <p className="text-xs text-text-secondary">
-                        Address autocomplete needs Amazon Location environment variables.
+                        Address autocomplete is not configured, type your business address.
                       </p>
                     ) : null}
                     {addressLookupError ? (
@@ -532,7 +532,7 @@ export function QuoteEngine({
                     />
                   </label>
                   <label className="flex flex-col gap-1.5 text-sm">
-                    <span className="font-medium text-text-dark">Email</span>
+                    <span className="font-medium text-text-dark">Email Address</span>
                     <input
                       type="email"
                       value={form.email}
@@ -541,7 +541,7 @@ export function QuoteEngine({
                     />
                   </label>
                   <label className="flex flex-col gap-1.5 text-sm">
-                    <span className="font-medium text-text-dark">Mobile</span>
+                    <span className="font-medium text-text-dark">Mobile Number</span>
                     <input
                       type="tel"
                       value={form.mobile}
@@ -581,7 +581,7 @@ export function QuoteEngine({
                       submitting
                     }
                   >
-                    {submitting ? "Submitting…" : "See My Result"}
+                    {submitting ? "Processing…" : "See My Price"}
                   </Button>
                 </div>
               </div>

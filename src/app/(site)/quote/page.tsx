@@ -33,7 +33,7 @@ export default async function QuotePage({
             {heading}
           </h1>
           <p className="mt-3 text-text-secondary">
-            No obligation. Most applications take under 5 minutes.
+            No obligation. Most applications take under 1 minute.
           </p>
         </div>
         <Suspense fallback={null}>
