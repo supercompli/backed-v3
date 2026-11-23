@@ -23,41 +23,40 @@ export async function POST(request: Request) {
 
   const result = evaluatePIRisk(profession, body);
 
-  try {
-    const saveQuoteRequest = async () => {
-      const supabase = await getSupabaseServerClient();
-      if (!supabase) return;
+  // Saving and notifying are awaited (so they complete on serverless) but must
+  // never block the customer's price: the rating has already succeeded here.
+  const saveQuoteRequest = async () => {
+    const supabase = await getSupabaseServerClient();
+    if (!supabase) return;
 
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      const { error } = await supabase.from("quote_requests").insert({
-        user_id: user?.id ?? null,
-        profession_slug: profession.slug,
-        answers: body,
-        result,
-        rating_version: result.ratingVersion,
-        risk_classification: result.riskClassification,
-        contact_email: body.contact.email,
-      });
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    const { error } = await supabase.from("quote_requests").insert({
+      user_id: user?.id ?? null,
+      profession_slug: profession.slug,
+      answers: body,
+      result,
+      rating_version: result.ratingVersion,
+      risk_classification: result.riskClassification,
+      contact_email: body.contact.email,
+    });
 
-      if (error) throw error;
-    };
+    if (error) throw error;
+  };
 
-    const [, emailResult] = await Promise.all([
-      saveQuoteRequest(),
-      sendQuoteEmails({ answers: body, profession, result }),
-    ]);
+  const [saved, emailed] = await Promise.allSettled([
+    saveQuoteRequest(),
+    sendQuoteEmails({ answers: body, profession, result }),
+  ]);
 
-    if (!emailResult.sent) {
-      throw new Error(emailResult.reason);
-    }
-  } catch (error) {
-    console.error("Unable to submit quote request", error);
-    return NextResponse.json(
-      { error: "Unable to submit your quote request right now." },
-      { status: 503 },
-    );
+  if (saved.status === "rejected") {
+    console.error("Unable to save quote request", saved.reason);
+  }
+  if (emailed.status === "rejected") {
+    console.error("Unable to send quote emails", emailed.reason);
+  } else if (!emailed.value.sent) {
+    console.error("Quote emails not sent:", emailed.value.reason);
   }
 
   return NextResponse.json({ result });
