@@ -180,7 +180,7 @@ export function QuoteEngine({
     };
 
     const controller = new AbortController();
-    const timeout = window.setTimeout(() => controller.abort(), 20_000);
+    const timeout = window.setTimeout(() => controller.abort(), 40_000);
 
     try {
       const res = await fetch("/api/quote", {

@@ -1,4 +1,4 @@
-import { after, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { getQuoteProfession } from "@/data/professions";
 import { PI_PRODUCT_SLUG, parseQuoteProducts } from "@/data/quoteProducts";
 import { evaluatePIRisk } from "@/lib/rating/evaluatePIRisk";
@@ -23,40 +23,42 @@ export async function POST(request: Request) {
 
   const result = evaluatePIRisk(profession, body);
 
-  // Saving the request and sending notifications must not hold up the quote
-  // result. In particular, an unavailable SMTP server can otherwise leave the
-  // browser waiting indefinitely even though rating has already completed.
-  after(async () => {
-    try {
+  try {
+    const saveQuoteRequest = async () => {
       const supabase = await getSupabaseServerClient();
-      if (supabase) {
-        const {
-          data: { user },
-        } = await supabase.auth.getUser();
-        const { error } = await supabase.from("quote_requests").insert({
-          user_id: user?.id ?? null,
-          profession_slug: profession.slug,
-          answers: body,
-          result,
-          rating_version: result.ratingVersion,
-          risk_classification: result.riskClassification,
-          contact_email: body.contact.email,
-        });
+      if (!supabase) return;
 
-        if (error) {
-          console.error("Unable to save quote request", error);
-        }
-      }
-    } catch (error) {
-      console.error("Unable to save quote request", error);
-    }
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      const { error } = await supabase.from("quote_requests").insert({
+        user_id: user?.id ?? null,
+        profession_slug: profession.slug,
+        answers: body,
+        result,
+        rating_version: result.ratingVersion,
+        risk_classification: result.riskClassification,
+        contact_email: body.contact.email,
+      });
 
-    try {
-      await sendQuoteEmails({ answers: body, profession, result });
-    } catch (error) {
-      console.error("Unable to send quote confirmation emails", error);
+      if (error) throw error;
+    };
+
+    const [, emailResult] = await Promise.all([
+      saveQuoteRequest(),
+      sendQuoteEmails({ answers: body, profession, result }),
+    ]);
+
+    if (!emailResult.sent) {
+      throw new Error(emailResult.reason);
     }
-  });
+  } catch (error) {
+    console.error("Unable to submit quote request", error);
+    return NextResponse.json(
+      { error: "Unable to submit your quote request right now." },
+      { status: 503 },
+    );
+  }
 
   return NextResponse.json({ result });
 }

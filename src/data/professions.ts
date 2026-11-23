@@ -452,8 +452,6 @@ export const professions: Profession[] = [
     runOffNote: "Run-off cover is important when a practice merges, is sold, or a sole practitioner retires.",
     questions: [
       q.annualTurnover(),
-      q.percentage("auditPercentage", "Audit / assurance work (%)"),
-      q.percentage("taxPercentage", "Tax work (%)"),
       q.largestContract("Largest client (annual turnover)"),
       q.worksOutsideSA(),
       q.claims(),

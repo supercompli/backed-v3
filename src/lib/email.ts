@@ -20,7 +20,7 @@ const smtpPort = Number(process.env.SMTP_PORT || 587);
 const smtpUser = process.env.SMTP_USER;
 const smtpPass = process.env.SMTP_PASS;
 const mailFrom = process.env.SMTP_FROM || smtpUser;
-const adminEmail = process.env.ADMIN_EMAIL;
+const adminEmail = process.env.ADMIN_EMAIL || process.env.SMTP_TO;
 
 function isEmailConfigured() {
   return Boolean(smtpHost && smtpUser && smtpPass && mailFrom);
@@ -95,11 +95,15 @@ export async function sendQuoteEmails({
     return { sent: false, reason: "SMTP is not configured." };
   }
 
+  if (!adminEmail) {
+    return { sent: false, reason: "The admin notification email is not configured." };
+  }
+
   const transport = createTransport();
   const summary = plainQuoteSummary(answers, profession, result);
   const customerName = answers.contact.fullName.split(" ")[0] || "there";
 
-  await transport.sendMail({
+  const customerEmail = transport.sendMail({
     from: mailFrom,
     to: answers.contact.email,
     subject: "We received your BackedSure quote request",
@@ -117,22 +121,78 @@ export async function sendQuoteEmails({
     ].join("\n"),
   });
 
-  if (adminEmail) {
-    await transport.sendMail({
-      from: mailFrom,
-      to: adminEmail,
-      replyTo: answers.contact.email,
-      subject: `New quote request (${quoteProductNames(answers.products).join(", ")}): ${profession.pluralName} - ${answers.businessName}`,
-      text: [
-        "A new BackedSure quote request was submitted.",
-        "",
-        summary,
-        "",
-        "Raw answers:",
-        JSON.stringify(answers, null, 2),
-      ].join("\n"),
-    });
+  const adminNotification = transport.sendMail({
+    from: mailFrom,
+    to: adminEmail,
+    replyTo: answers.contact.email,
+    subject: `New quote request (${quoteProductNames(answers.products).join(", ")}): ${profession.pluralName} - ${answers.businessName}`,
+    text: [
+      "A new BackedSure quote request was submitted.",
+      "",
+      summary,
+      "",
+      "Raw answers:",
+      JSON.stringify(answers, null, 2),
+    ].join("\n"),
+  });
+
+  await Promise.all([customerEmail, adminNotification]);
+
+  return { sent: true };
+}
+
+export interface ContactSubmission {
+  name: string;
+  email: string;
+  message: string;
+}
+
+export async function sendContactEmails(submission: ContactSubmission) {
+  if (!isEmailConfigured()) {
+    return { sent: false, reason: "SMTP is not configured." };
   }
+
+  if (!adminEmail) {
+    return { sent: false, reason: "The admin notification email is not configured." };
+  }
+
+  const transport = createTransport();
+  const customerName = submission.name.split(" ")[0] || "there";
+
+  const customerEmail = transport.sendMail({
+    from: mailFrom,
+    to: submission.email,
+    subject: "We received your BackedSure message",
+    text: [
+      `Hi ${customerName},`,
+      "",
+      "Thanks for contacting BackedSure. A specialist will respond shortly.",
+      "",
+      "Your message:",
+      submission.message,
+      "",
+      "Regards,",
+      "BackedSure",
+    ].join("\n"),
+  });
+
+  const adminNotification = transport.sendMail({
+    from: mailFrom,
+    to: adminEmail,
+    replyTo: submission.email,
+    subject: `New website contact: ${submission.name}`,
+    text: [
+      "A new message was submitted through the BackedSure contact form.",
+      "",
+      `Name: ${submission.name}`,
+      `Email: ${submission.email}`,
+      "",
+      "Message:",
+      submission.message,
+    ].join("\n"),
+  });
+
+  await Promise.all([customerEmail, adminNotification]);
 
   return { sent: true };
 }
